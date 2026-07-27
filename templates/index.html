@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IS MasterClass Simulator — Cristal Chile</title>
+    <meta name="description" content="Simulador avanzado y plataforma de entrenamiento para operadores de máquina I.S.">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="ambient-bg">
+        <div class="glow-orb orange"></div>
+        <div class="glow-orb blue"></div>
+        <div class="glow-orb red"></div>
+    </div>
+
+    <header class="glass-nav">
+        <div class="brand" onclick="app.showView('menu')">
+            <div class="brand-icon">🔥</div>
+            <div class="brand-text">
+                <h1>IS MasterClass</h1>
+                <span>Cristal Chile Advanced Training</span>
+            </div>
+        </div>
+        <div class="user-stats">
+            <div class="stat-box">
+                <span class="stat-label">Rango</span>
+                <strong id="userLevel" class="stat-value text-gradient">Aprendiz I.S.</strong>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Experiencia (XP)</span>
+                <div class="xp-bar-container">
+                    <div id="xpBar" class="xp-bar-fill"></div>
+                </div>
+                <span id="xpText" class="xp-text">0 / 100</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- VISTA: MENÚ PRINCIPAL -->
+        <section id="view-menu" class="view-section active">
+            <header class="hero">
+                <span class="badge">Simulador v2.0</span>
+                <h2>Formación de Alta Precisión</h2>
+                <p>Domina la máquina I.S., diagnostica defectos en tiempo real y calibra tiempos del ciclo NNPB.</p>
+            </header>
+
+            <div class="modules-grid">
+                <div class="module-card glass-card" onclick="app.showView('defectos')">
+                    <div class="card-icon">🔬</div>
+                    <div class="card-content">
+                        <h3>Laboratorio de Defectos</h3>
+                        <p>Simulador interactivo de diagnóstico. Identifica fallas en el envase y corrige los parámetros de la máquina.</p>
+                    </div>
+                    <div class="card-action">
+                        <span class="status-indicator online"></span> Módulo Activo
+                    </div>
+                </div>
+
+                <div class="module-card glass-card" onclick="app.showView('tiempos')">
+                    <div class="card-icon">⏱️</div>
+                    <div class="card-content">
+                        <h3>Tambor de Temporización</h3>
+                        <p>Ajusta el ciclo de 360°. Calibra tiempos de apertura, cierre, y soplado sin riesgo de colisión.</p>
+                    </div>
+                    <div class="card-action">
+                        <span class="status-indicator online"></span> Módulo Activo
+                    </div>
+                </div>
+
+                <div class="module-card glass-card locked">
+                    <div class="card-icon">📚</div>
+                    <div class="card-content">
+                        <h3>Anatomía I.S. (3D)</h3>
+                        <p>Explorador detallado de mecanismos de la sección (Próximamente).</p>
+                    </div>
+                    <div class="card-action">
+                        <span class="status-indicator offline"></span> Requiere Nivel 3
+                    </div>
+                </div>
+
+                <div class="module-card glass-card locked">
+                    <div class="card-icon">🏆</div>
+                    <div class="card-content">
+                        <h3>Certificación Final</h3>
+                        <p>Prueba de simulación bajo presión para obtener el rango de Maestro Vidriero.</p>
+                    </div>
+                    <div class="card-action">
+                        <span class="status-indicator offline"></span> Requiere Nivel 5
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: LABORATORIO DE DEFECTOS -->
+        <section id="view-defectos" class="view-section">
+            <div class="glass-panel lab-panel">
+                <header class="lab-header">
+                    <h2>Laboratorio de Diagnóstico 🔍</h2>
+                    <button class="btn-secondary" onclick="app.showView('menu')">Volver al Centro</button>
+                </header>
+                
+                <div class="lab-content">
+                    <div class="defecto-display">
+                        <div class="defecto-visual">
+                            <div class="defecto-img-placeholder">
+                                <span id="defectoIcon">⚠️</span>
+                            </div>
+                            <h3 id="defectoNombre">Cargando caso...</h3>
+                            <p id="defectoDesc" class="defecto-desc">Esperando datos de telemetría...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="defecto-controls">
+                        <h3>¿Cuál es la causa raíz o el ajuste necesario?</h3>
+                        <div id="opcionesContainer" class="options-list">
+                            <!-- Opciones generadas por JS -->
+                        </div>
+                        <div id="feedbackPanel" class="feedback-panel hidden">
+                            <!-- Mensaje de acierto o error -->
+                        </div>
+                        <button id="btnNextDefect" class="btn-primary hidden" onclick="app.loadNextDefect()">Siguiente Caso 🚀</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: SIMULADOR DE TIEMPOS -->
+        <section id="view-tiempos" class="view-section">
+            <div class="glass-panel simulator-panel">
+                <header class="lab-header">
+                    <h2>Simulador de Tambor (Timing) ⏱️</h2>
+                    <button class="btn-secondary" onclick="app.showView('menu')">Volver al Centro</button>
+                </header>
+                
+                <div class="simulator-content">
+                    <div class="timing-visualizer">
+                        <div class="circle-container">
+                            <div id="timingWheel" class="timing-wheel">
+                                <div class="wheel-center">360°</div>
+                                <div class="event-slice" id="slice-blank">Premolde</div>
+                                <div class="event-slice" id="slice-blow">Soplado</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timing-controls">
+                        <h3>Parámetros de Sección (NNPB)</h3>
+                        <div class="control-group">
+                            <label for="range-blank">Cierre de Premolde (Inicio): <span id="val-blank">0</span>°</label>
+                            <input type="range" id="range-blank" title="Cierre de Premolde" min="0" max="360" value="0" oninput="app.updateTiming()">
+                        </div>
+                        <div class="control-group">
+                            <label for="range-blow">Tiempo de Soplado (Inicio): <span id="val-blow">180</span>°</label>
+                            <input type="range" id="range-blow" title="Tiempo de Soplado" min="0" max="360" value="180" oninput="app.updateTiming()">
+                        </div>
+                        <div class="alert-box" id="timingAlert">
+                            ✔️ Tiempos sincronizados. Riesgo de colisión nulo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

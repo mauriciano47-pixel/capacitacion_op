@@ -1,0 +1,5 @@
+# Reglas del Workspace — Capacitación Operador I.S. (`capacitacion_op`)
+
+- **REGLA ABSOLUTA DE LIMPIEZA FINAL Y CERO ERRORES/PROBLEMAS**: Cada vez que se realice cualquier modificación, edición, parche o generación de archivos en el proyecto, el agente DEBE revisar de forma obligatoria y autónoma la pestaña de problemas del IDE (`@[current_problems]`), consolas y linters, resolviendo de inmediato el 100% de advertencias, lints, alertas y errores (Python, JavaScript, HTML, CSS, Markdown) antes de dar por concluida la tarea o entregar la respuesta.
+
+- **Directidad Técnica y Cero Obviedades en Diagnósticos**: Cuando el usuario reporte un fallo, discrepancia de versión o error en sus aplicaciones, se DEBE asumir automáticamente que ya ejecutó todas las acciones de cliente obvias (recargar navegador, presionar botones de reset de caché o F5). Queda prohibido responder con sugerencias o explicaciones redundantes de nivel usuario. El agente debe proceder de inmediato a auditar código, infraestructura, headers, Service Workers o aplicar soluciones alternativas técnicas avanzadas de fondo.
