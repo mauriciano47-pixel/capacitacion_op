@@ -149,7 +149,25 @@ const app = {
         
         const imgElement = document.getElementById('defectoImage');
         if (imgElement && defect.image) {
-            imgElement.src = defect.image;
+            imgElement.dataset.retried = '';
+            imgElement.onerror = function() {
+                if (!this.dataset.retried) {
+                    this.dataset.retried = 'true';
+                    const filename = this.src.split('/').pop();
+                    if (this.src.includes('/static/')) {
+                        this.src = 'images/defects/' + filename;
+                    } else {
+                        this.src = 'static/images/defects/' + filename;
+                    }
+                }
+            };
+            
+            // Prefer static/ prefix if running in Django environment
+            if (window.location.pathname.includes('/static/') || document.querySelector('link[href*="static/"]')) {
+                imgElement.src = 'static/images/defects/' + defect.id + '.png';
+            } else {
+                imgElement.src = 'images/defects/' + defect.id + '.png';
+            }
             imgElement.style.display = 'block';
         }
         
