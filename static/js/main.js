@@ -202,12 +202,16 @@ const app = {
                     this.src = 'images/anatomy/' + id + '.png';
                 }
             };
-            if (window.location.pathname.includes('/static/') || document.querySelector('link[href*="static/"]')) {
-                realImgEl.src = '/static/images/anatomy/' + id + '.png';
-            } else {
-                realImgEl.src = 'images/anatomy/' + id + '.png';
-            }
-        }
+            const unsplashMap = {
+            macho: 'glass+press',
+            premolde: 'glass+blank+mold',
+            inversion: 'glass+invert+mechanism',
+            molde_soplo: 'glass+blow+mold',
+            cabeza_soplo: 'glass+blow+head',
+            takeout: 'glass+extraction+tool'
+        };
+        const query = unsplashMap[id] || 'glass+machine';
+        realImgEl.src = `https://source.unsplash.com/featured/400x300?${query}`;    }
 
         const specContainer = document.getElementById('specCardContainer');
         if (specContainer) {
