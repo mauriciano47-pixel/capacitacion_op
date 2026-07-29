@@ -128,6 +128,49 @@ const app = {
     anatomiaAnim: true,
     anatomiaExplored: [],
 
+    loadStats() {
+        try {
+            const savedXp = localStorage.getItem('is_masterclass_xp');
+            const savedLevel = localStorage.getItem('is_masterclass_level');
+            if (savedXp !== null) this.xp = parseInt(savedXp, 10) || 0;
+            if (savedLevel !== null) this.level = parseInt(savedLevel, 10) || 1;
+        } catch (e) {}
+        this.updateStatsUI();
+    },
+
+    updateStatsUI() {
+        const userLevelEl = document.getElementById('userLevel');
+        const xpBarEl = document.getElementById('xpBar');
+        const xpTextEl = document.getElementById('xpText');
+        
+        const levels = [
+            'Aprendiz I.S.',
+            'Operador Nivel I',
+            'Operador Nivel II',
+            'Especialista NNPB',
+            'Maestro Vidriero'
+        ];
+        const levelName = levels[Math.min(Math.max(this.level - 1, 0), levels.length - 1)];
+        
+        if (userLevelEl) userLevelEl.innerText = levelName;
+        if (xpBarEl) xpBarEl.style.width = Math.min((this.xp % 100), 100) + '%';
+        if (xpTextEl) xpTextEl.innerText = `${this.xp} / 100`;
+    },
+
+    addXp(amount) {
+        this.xp += amount;
+        this.level = Math.min(Math.floor(this.xp / 100) + 1, 5);
+        try {
+            localStorage.setItem('is_masterclass_xp', this.xp);
+            localStorage.setItem('is_masterclass_level', this.level);
+        } catch (e) {}
+        this.updateStatsUI();
+    },
+
+    addXP(amount) {
+        this.addXp(amount);
+    },
+
     init() {
         console.log('[IS MasterClass] Sistema Inicializado con Imágenes Reales.');
         this.loadStats();
