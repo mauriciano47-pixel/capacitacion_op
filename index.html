@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IS MasterClass Simulator — Cristal Chile</title>
     <meta name="description" content="Simulador avanzado y plataforma de entrenamiento para operadores de máquina I.S.">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css?v=3.2.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -62,22 +62,22 @@
                 <div class="module-card glass-card" onclick="app.showView('tiempos')">
                     <div class="card-icon">⏱️</div>
                     <div class="card-content">
-                        <h3>Tambor de Temporización</h3>
-                        <p>Ajusta el ciclo de 360°. Calibra tiempos de apertura, cierre, y soplado sin riesgo de colisión.</p>
+                        <h3>Consola de Temporización BDF</h3>
+                        <p>Secuenciador electrónico del ciclo de 360°. Calibra eventos NNPB (Prensado Macho, Inversión, Cierre Molde y Soplo Final) con telemetría en tiempo real.</p>
                     </div>
                     <div class="card-action">
                         <span class="status-indicator online"></span> Módulo Activo
                     </div>
                 </div>
 
-                <div class="module-card glass-card locked">
+                <div class="module-card glass-card" onclick="app.showView('anatomia')">
                     <div class="card-icon">📚</div>
                     <div class="card-content">
                         <h3>Anatomía I.S. (3D)</h3>
-                        <p>Explorador detallado de mecanismos de la sección (Próximamente).</p>
+                        <p>Explorador interactivo 3D de mecanismos de sección I.S. (Macho, Premolde, Inversión, Soplo).</p>
                     </div>
                     <div class="card-action">
-                        <span class="status-indicator offline"></span> Requiere Nivel 3
+                        <span class="status-indicator online"></span> Módulo Activo
                     </div>
                 </div>
 
@@ -127,36 +127,193 @@
             </div>
         </section>
 
-        <!-- VISTA: SIMULADOR DE TIEMPOS -->
+        <!-- VISTA: CONSOLA DE TEMPORIZACIÓN BDF -->
         <section id="view-tiempos" class="view-section">
             <div class="glass-panel simulator-panel">
                 <header class="lab-header">
-                    <h2>Simulador de Tambor (Timing) ⏱️</h2>
+                    <div>
+                        <h2>Consola de Temporización BDF ⏱️</h2>
+                        <span class="sub-header-title">Secuenciador Electrónico I.S. — Parámetros Oficiales NNPB / Cristal Chile</span>
+                    </div>
                     <button class="btn-secondary" onclick="app.showView('menu')">Volver al Centro</button>
                 </header>
-                
-                <div class="simulator-content">
-                    <div class="timing-visualizer">
-                        <div class="circle-container">
-                            <div id="timingWheel" class="timing-wheel">
-                                <div class="wheel-center">360°</div>
-                                <div class="event-slice" id="slice-blank">Premolde</div>
-                                <div class="event-slice" id="slice-blow">Soplado</div>
+
+                <!-- TELEMETRÍA GENERAL DE MÁQUINA -->
+                <div class="telemetry-bar glass-card-sm">
+                    <div class="telemetry-item">
+                        <label for="calcBpm">Velocidad (BPM):</label>
+                        <input type="number" id="calcBpm" value="396" min="60" max="600" oninput="app.updateTiming()">
+                    </div>
+                    <div class="telemetry-item">
+                        <label for="calcSections">Secciones:</label>
+                        <input type="number" id="calcSections" value="11" min="1" max="16" oninput="app.updateTiming()">
+                    </div>
+                    <div class="telemetry-item">
+                        <label for="calcCavities">Cavidades:</label>
+                        <select id="calcCavities" onchange="app.updateTiming()">
+                            <option value="1">S.G. (Sencilla)</option>
+                            <option value="2">D.G. (Doble)</option>
+                            <option value="3" selected>T.G. (Triple Gota)</option>
+                            <option value="4">Q.G. (Cuádruple)</option>
+                        </select>
+                    </div>
+                    <div class="telemetry-badge">
+                        <span id="cycleTimeDisplay">Ciclo: 500 ms | Cizalla: 132 CPM</span>
+                    </div>
+                </div>
+
+                <div class="bdf-console-grid">
+                    <!-- DIAGRAMA GANTT INTERACTIVO DEL CICLO DE 360° -->
+                    <div class="gantt-panel">
+                        <h3>Diagrama Gantt de Ciclo 360°</h3>
+                        <p class="panel-desc">Visualización en grados de la secuencia de mecanismos en tiempo real.</p>
+                        
+                        <div class="gantt-chart">
+                            <div class="gantt-scale">
+                                <span>0°</span>
+                                <span>90°</span>
+                                <span>180°</span>
+                                <span>270°</span>
+                                <span>360°</span>
+                            </div>
+                            <div class="gantt-row">
+                                <span class="gantt-label">Prensado Macho</span>
+                                <div class="gantt-track">
+                                    <div id="barPlunger" class="gantt-bar"></div>
+                                </div>
+                                <span id="labelPlunger" class="gantt-val">0°-70°</span>
+                            </div>
+                            <div class="gantt-row">
+                                <span class="gantt-label">Inversión Parison</span>
+                                <div class="gantt-track">
+                                    <div id="barInvert" class="gantt-bar"></div>
+                                </div>
+                                <span id="labelInvert" class="gantt-val">90°-120°</span>
+                            </div>
+                            <div class="gantt-row">
+                                <span class="gantt-label">Molde de Soplo</span>
+                                <div class="gantt-track">
+                                    <div id="barBlowMold" class="gantt-bar"></div>
+                                </div>
+                                <span id="labelBlowMold" class="gantt-val">120°-330°</span>
+                            </div>
+                            <div class="gantt-row">
+                                <span class="gantt-label">Soplado Final</span>
+                                <div class="gantt-track">
+                                    <div id="barFinalBlow" class="gantt-bar"></div>
+                                </div>
+                                <span id="labelFinalBlow" class="gantt-val">140°-200°</span>
                             </div>
                         </div>
+
+                        <!-- PANEL DE DIAGNÓSTICO Y ALERTAS BDF EN TIEMPO REAL -->
+                        <div id="bdfValidationResults" class="validation-panel">
+                            <!-- Alertas de validación renderizadas dinámicamente -->
+                        </div>
                     </div>
-                    <div class="timing-controls">
-                        <h3>Parámetros de Sección (NNPB)</h3>
-                        <div class="control-group">
-                            <label for="range-blank">Cierre de Premolde (Inicio): <span id="val-blank">0</span>°</label>
-                            <input type="range" id="range-blank" title="Cierre de Premolde" min="0" max="360" value="0" oninput="app.updateTiming()">
+
+                    <!-- MATRIZ DE EVENTOS NNPB -->
+                    <div class="events-panel">
+                        <h3>Matriz de Eventos NNPB (0° - 360°)</h3>
+
+                        <div class="control-group-sm">
+                            <label for="valPlungerUp">Subida Macho (Plunger Up): <strong id="lblPlungerUp">0</strong>°</label>
+                            <input type="range" id="valPlungerUp" min="0" max="360" value="0" oninput="app.updateTiming()">
                         </div>
-                        <div class="control-group">
-                            <label for="range-blow">Tiempo de Soplado (Inicio): <span id="val-blow">180</span>°</label>
-                            <input type="range" id="range-blow" title="Tiempo de Soplado" min="0" max="360" value="180" oninput="app.updateTiming()">
+
+                        <div class="control-group-sm">
+                            <label for="valPlungerDown">Bajada Macho (Plunger Down): <strong id="lblPlungerDown">70</strong>°</label>
+                            <input type="range" id="valPlungerDown" min="0" max="360" value="70" oninput="app.updateTiming()">
                         </div>
-                        <div class="alert-box" id="timingAlert">
-                            ✔️ Tiempos sincronizados. Riesgo de colisión nulo.
+
+                        <div class="control-group-sm">
+                            <label for="valInvertStart">Inicio Inversión (Invert Start): <strong id="lblInvertStart">90</strong>°</label>
+                            <input type="range" id="valInvertStart" min="0" max="360" value="90" oninput="app.updateTiming()">
+                        </div>
+
+                        <div class="control-group-sm">
+                            <label for="valBlowClose">Cierre Molde Soplo (Blow Mold Close): <strong id="lblBlowClose">120</strong>°</label>
+                            <input type="range" id="valBlowClose" min="0" max="360" value="120" oninput="app.updateTiming()">
+                        </div>
+
+                        <div class="control-group-sm">
+                            <label for="valNeckOpen">Apertura Anillo Boca (Neck Ring Open): <strong id="lblNeckOpen">135</strong>°</label>
+                            <input type="range" id="valNeckOpen" min="0" max="360" value="135" oninput="app.updateTiming()">
+                        </div>
+
+                        <div class="control-group-sm">
+                            <label for="valBlowOn">Inicio Soplado Final (Blow On): <strong id="lblBlowOn">140</strong>°</label>
+                            <input type="range" id="valBlowOn" min="0" max="360" value="140" oninput="app.updateTiming()">
+                        </div>
+
+                        <div class="control-group-sm">
+                            <label for="valBlowOff">Término Soplado Final (Blow Off): <strong id="lblBlowOff">200</strong>°</label>
+                            <input type="range" id="valBlowOff" min="0" max="360" value="200" oninput="app.updateTiming()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: ANATOMÍA I.S. (3D) -->
+        <section id="view-anatomia" class="view-section">
+            <div class="glass-panel lab-panel">
+                <header class="lab-header">
+                    <div>
+                        <h2>Explorador de Anatomía I.S. (3D) 📚</h2>
+                        <span class="sub-header-title">Despiece e Inspección de Mecanismos de Sección NNPB & Soplo-Soplo</span>
+                    </div>
+                    <button class="btn-secondary" onclick="app.showView('menu')">Volver al Centro</button>
+                </header>
+
+                <div class="anatomy-grid">
+                    <!-- FOTOGRAFÍA REAL E INSPECTOR 3D DE MOLDERÍA -->
+                    <div class="visualizer-3d-card">
+                        <div class="anatomy-media-header">
+                            <span class="media-badge">📷 Moldería y Mecanismos Reales I.S. (Cristal Chile)</span>
+                        </div>
+                        <div class="real-image-wrapper">
+                            <img id="anatomyImageReal" class="anatomy-real-img" src="images/anatomy/macho.png" alt="Moldería Real I.S.">
+                        </div>
+                        <div class="canvas-3d-wrapper">
+                            <canvas id="canvasAnatomia3D" width="500" height="260"></canvas>
+                            <div class="canvas-controls-overlay">
+                                <button class="btn-overlay" onclick="app.rotateAnatomia3D(-15)">↺ Izq</button>
+                                <button class="btn-overlay" onclick="app.toggleAnatomiaAnim()">⏯️ Animación</button>
+                                <button class="btn-overlay" onclick="app.rotateAnatomia3D(15)">↻ Der</button>
+                            </div>
+                        </div>
+                        <h3 id="anatomyPartTitle" class="part-title">Selecciona un Mecanismo</h3>
+                        <p id="anatomyPartSub" class="part-sub">Haz clic en la lista para inspeccionar la moldería real y la cinemática en 3D.</p>
+                    </div>
+
+                    <!-- SELECTOR Y DETALLES DEL MECANISMO -->
+                    <div class="anatomy-details-panel">
+                        <h3>Mecanismos de Sección I.S.</h3>
+                        <div class="parts-selector-grid">
+                            <button class="part-btn active" onclick="app.selectMecanismo('macho', this)">
+                                <span>🔹 Macho Prensador (Plunger)</span>
+                            </button>
+                            <button class="part-btn" onclick="app.selectMecanismo('premolde', this)">
+                                <span>🔹 Premolde (Blank Mold)</span>
+                            </button>
+                            <button class="part-btn" onclick="app.selectMecanismo('inversion', this)">
+                                <span>🔹 Mecanismo de Inversión</span>
+                            </button>
+                            <button class="part-btn" onclick="app.selectMecanismo('molde_soplo', this)">
+                                <span>🔹 Molde de Soplo (Blow Mold)</span>
+                            </button>
+                            <button class="part-btn" onclick="app.selectMecanismo('cabeza_soplo', this)">
+                                <span>🔹 Cabeza de Soplo (Blow Head)</span>
+                            </button>
+                            <button class="part-btn" onclick="app.selectMecanismo('takeout', this)">
+                                <span>🔹 Pinzas Extracción (Takeout)</span>
+                            </button>
+                        </div>
+
+                        <!-- TARJETA DE ESPECIFICACIONES TÉCNICAS -->
+                        <div id="specCardContainer" class="spec-card">
+                            <!-- Se renderiza por JS -->
                         </div>
                     </div>
                 </div>
@@ -164,6 +321,6 @@
         </section>
     </main>
 
-    <script src="main.js"></script>
+    <script src="main.js?v=3.2.0"></script>
 </body>
 </html>

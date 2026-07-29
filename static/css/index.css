@@ -285,60 +285,305 @@ h1, h2, h3 { font-family: 'Orbitron', sans-serif; }
 .feedback-panel.error { background: rgba(255, 0, 85, 0.1); color: #ff0055; border: 1px solid #ff0055; }
 .hidden { display: none !important; }
 
-/* --- Simulador Timing --- */
-.simulator-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
-.circle-container {
-    width: 300px; height: 300px;
-    margin: 0 auto;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.4);
-    border: 2px solid rgba(255,255,255,0.1);
-    position: relative;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
-}
-.timing-wheel {
-    width: 100%; height: 100%; border-radius: 50%;
-    position: relative; overflow: hidden;
-}
-.wheel-center {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px; height: 60px;
-    background: var(--bg-dark);
-    border-radius: 50%; z-index: 10;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Orbitron'; font-size: 0.8rem; font-weight: bold;
-    border: 2px solid rgba(255,255,255,0.2);
-}
-.event-slice {
-    position: absolute;
-    width: 50%; height: 50%;
-    transform-origin: 100% 100%;
-    /* These variables will be updated by JS, CSS logic handles drawing conic slices. 
-       Since standard CSS can't easily draw generic conic-gradients with HTML elements this way cleanly, 
-       we will use a conic-gradient on the container in JS instead. Hiding these divs. */
-    display: none; 
-}
-/* JS will apply background to .timing-wheel */
+/* --- Consola de Temporización BDF --- */
+.sub-header-title { font-size: 0.8rem; color: var(--text-muted); display: block; margin-top: 0.2rem; }
 
-.control-group { margin-bottom: 1.5rem; }
-.control-group label { display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;}
-.control-group input[type="range"] {
+.telemetry-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.telemetry-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+.telemetry-item input[type="number"], .telemetry-item select {
+    background: rgba(20, 24, 32, 0.8);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+}
+.telemetry-badge {
+    background: rgba(0, 136, 255, 0.15);
+    border: 1px solid var(--accent-blue);
+    color: var(--accent-blue);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.bdf-console-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2rem;
+}
+
+.gantt-panel, .events-panel {
+    background: rgba(15, 17, 21, 0.5);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+.panel-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.2rem; }
+
+/* Gantt Chart */
+.gantt-chart {
+    margin-bottom: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.gantt-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: 'Orbitron';
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    margin-bottom: 0.8rem;
+}
+.gantt-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 70px;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+.gantt-label { font-size: 0.75rem; color: var(--text-main); font-weight: 600; white-space: nowrap; }
+.gantt-track {
+    height: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+}
+.gantt-bar {
+    position: absolute;
+    top: 0; bottom: 0;
+    border-radius: 7px;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+.gantt-val { font-size: 0.7rem; color: var(--text-muted); font-family: 'Orbitron'; text-align: right; }
+
+/* Dynamic Validation Alerts */
+.validation-panel { display: flex; flex-direction: column; gap: 0.75rem; }
+.validation-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+.validation-alert.success { background: rgba(0, 255, 136, 0.1); border: 1px solid var(--accent-green); color: var(--accent-green); }
+.validation-alert.warning { background: rgba(255, 170, 0, 0.1); border: 1px solid #ffaa00; color: #ffaa00; }
+.validation-alert.danger { background: rgba(255, 85, 0, 0.15); border: 1px solid var(--accent-orange); color: var(--accent-orange); }
+
+/* Compact Controls */
+.control-group-sm { margin-bottom: 1rem; }
+.control-group-sm label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+.control-group-sm input[type="range"] {
     width: 100%;
     accent-color: var(--accent-orange);
     cursor: pointer;
 }
-.alert-box {
-    margin-top: 2rem; padding: 1rem;
-    background: rgba(0, 255, 136, 0.1);
-    border: 1px solid var(--accent-green);
-    border-radius: 8px; color: var(--accent-green);
-    font-size: 0.9rem;
+
+/* --- Módulo 3: Anatomía I.S. (3D) --- */
+.anatomy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
 }
-.alert-box.danger { background: rgba(255, 85, 0, 0.1); border-color: var(--accent-orange); color: var(--accent-orange); }
+
+.visualizer-3d-card {
+    background: rgba(15, 17, 21, 0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.anatomy-media-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.media-badge {
+    background: rgba(0, 136, 255, 0.15);
+    border: 1px solid var(--accent-blue);
+    color: var(--accent-blue);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.real-image-wrapper {
+    width: 100%;
+    height: 220px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    background: #000;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+}
+
+.anatomy-real-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.anatomy-real-img:hover {
+    transform: scale(1.04);
+}
+
+.canvas-3d-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: radial-gradient(circle at center, rgba(30, 38, 52, 0.8), rgba(10, 12, 16, 0.95));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+#canvasAnatomia3D {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.canvas-controls-overlay {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+}
+
+.btn-overlay {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    transition: background 0.2s;
+}
+.btn-overlay:hover { background: rgba(255, 255, 255, 0.15); }
+
+.part-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent-orange); margin-bottom: 0.3rem; text-align: center; }
+.part-sub { font-size: 0.85rem; color: var(--text-muted); text-align: center; }
+
+.anatomy-details-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.parts-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.6rem;
+}
+
+.part-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.part-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(3px);
+}
+.part-btn.active {
+    background: rgba(0, 136, 255, 0.15);
+    border-color: var(--accent-blue);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(0, 136, 255, 0.3);
+}
+
+.spec-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.4rem;
+}
+.spec-key { color: var(--text-muted); }
+.spec-val { font-weight: 600; color: var(--text-main); font-family: 'Orbitron'; font-size: 0.8rem; }
+.spec-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+.spec-defect-alert {
+    background: rgba(255, 85, 0, 0.1);
+    border: 1px solid var(--accent-orange);
+    color: var(--accent-orange);
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    .anatomy-grid { grid-template-columns: 1fr; }
+    .bdf-console-grid { grid-template-columns: 1fr; }
+    .telemetry-bar { flex-direction: column; align-items: stretch; }
     .lab-content, .simulator-content { grid-template-columns: 1fr; }
     .glass-nav { flex-direction: column; gap: 1rem; }
 }

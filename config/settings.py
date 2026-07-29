@@ -76,5 +76,6 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+WHITENOISE_MAX_AGE = 0
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
