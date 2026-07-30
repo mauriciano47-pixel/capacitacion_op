@@ -676,13 +676,29 @@ h1, h2, h3 { font-family: 'Orbitron', sans-serif; }
     padding: 0.25rem 0.6rem;
     border-radius: 6px;
 }
-.manual-mechanism-badge {
-    background: rgba(255, 85, 0, 0.15);
-    color: var(--accent-orange);
+.manual-type-badge {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     padding: 0.25rem 0.6rem;
     border-radius: 6px;
+    text-transform: uppercase;
+}
+.manual-type-badge.termico {
+    background: rgba(255, 85, 0, 0.2);
+    border: 1px solid var(--accent-orange);
+    color: var(--accent-orange);
+}
+.manual-type-badge.mecanico {
+    background: rgba(0, 230, 118, 0.2);
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+}
+.manual-mechanism-tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
 }
 .manual-card-body h4 {
     font-family: 'Orbitron', sans-serif;

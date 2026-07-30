@@ -5,16 +5,17 @@ const app = {
     level: 1,
     currentDefectIndex: 0,
     
-    // Base de datos de 10 defectos vidrieros enriquecida con información oficial de Cristalchile/Vitrodiag
+    // Base de datos de 10 defectos vidrieros enriquecida con información oficial de Cristalerías de Chile S.A. (Revisión 2020)
     defectosDB: [
         {
             id: "fondo_grueso",
             nombre: "Fondo Grueso (Thick Bottom)",
             image: "images/defects/fondo_grueso.png",
             zona: "Fondo / Base",
+            tipoDefecto: "Térmico",
             mecanismoCausa: "Premolde & Tiempo de Recalentamiento (Reheat)",
             desc: "El envase presenta acumulación excesiva de vidrio en el fondo. El parison no estiró lo suficiente durante la inversión debido a enfriamiento desigual o bajo recalentamiento (Reheat).",
-            solucionOperador: "Aumentar el tiempo de recalentamiento (Reheat) y ajustar el enfriamiento del premolde para permitir el estiramiento uniforme del vidrio por gravedad.",
+            solucionOperador: "Aumentar el tiempo de recalentamiento (Reheat) y reducir el enfriamiento del premolde para permitir el estiramiento uniforme del vidrio por gravedad.",
             opciones: [
                 { id: "A", texto: "Aumentar tiempo de enfriamiento de premolde (Blank Cooling)", correcta: false },
                 { id: "B", texto: "Aumentar tiempo de recalentamiento (Reheat) y reducir enfriamiento de premolde", correcta: true },
@@ -28,6 +29,7 @@ const app = {
             nombre: "Cuello Doblado (Bent Neck)",
             image: "images/defects/cuello_doblado.png",
             zona: "Cuello / Finish",
+            tipoDefecto: "Mecánico",
             mecanismoCausa: "Pinzas de Extracción (Takeout Mechanism)",
             desc: "El cuello del envase se observa desfasado o inclinado respecto al eje vertical al salir del molde soplador.",
             solucionOperador: "Ajustar la sincronización del Takeout para evitar la extracción antes de la solidificación plástica del cuello y verificar alineación de dedales.",
@@ -44,6 +46,7 @@ const app = {
             nombre: "Costura Abierta (Split Seam)",
             image: "images/defects/costura_abierta.png",
             zona: "Cuerpo / Moldería",
+            tipoDefecto: "Mecánico",
             mecanismoCausa: "Mecanismo de Cierre de Moldes (Mold Closing)",
             desc: "Se observa una fisura o abertura vertical marcada a lo largo de la línea de partición de las dos mitades del molde.",
             solucionOperador: "Incrementar la presión de apriete del mecanismo de cierre de moldes y auditar el desgaste de platinas o suciedad en las caras de partición.",
@@ -60,6 +63,7 @@ const app = {
             nombre: "Rebaba en la Boca (Overpressed Finish)",
             image: "images/defects/rebaba_boca.png",
             zona: "Boca / Cara de Sellado",
+            tipoDefecto: "Térmico / Peso",
             mecanismoCausa: "Macho Prensador NNPB (Servo Plunger)",
             desc: "Exceso de vidrio proyectado hacia arriba o a los lados en la cara de sellado de la boca, creando un filamento peligroso que causa fugas o cortes.",
             solucionOperador: "Reducir el peso de la gota en el alimentador o ajustar el límite de carrera/presión de aire del macho prensador (Plunger NNPB).",
@@ -76,6 +80,7 @@ const app = {
             nombre: "Pliegue de Hombro (Shoulder Wrinkle)",
             image: "images/defects/pliegue_hombro.png",
             zona: "Hombro",
+            tipoDefecto: "Térmico",
             mecanismoCausa: "Premolde & Inversión Servo",
             desc: "Ondulaciones o pliegues fríos en el área del hombro del envase causados por enfriamiento excesivo del parison o estiramiento brusco durante la inversión.",
             solucionOperador: "Reducir el tiempo de enfriamiento del premolde (Blank Cooling) y suavizar la aceleración de los brazos de inversión.",
@@ -92,9 +97,10 @@ const app = {
             nombre: "Pajarilla / Piel de Naranja (Orange Peel)",
             image: "images/defects/pajarilla_piel.png",
             zona: "Cuerpo / Superficie",
+            tipoDefecto: "Térmico / Swabbing",
             mecanismoCausa: "Molde de Soplo (Blow Mold)",
             desc: "Rugosidad o textura granulada en la superficie externa del vidrio debido a lubricación excesiva (Swabbing) o moldería sucia.",
-            solucionOperador: "Controlar y dosificar el uso de compuesto de lubricación (Swab) y limpiar depósitos de carbón en la cavidad del molde.",
+            solucionOperador: "Controlar y dosificar el uso de compuesto de lubricación (Swab) e hisopo seco, y descarbonizar cavidades de moldería.",
             opciones: [
                 { id: "A", texto: "Dosificar lubricación de moldes y descarbonizar cavidades", correcta: true },
                 { id: "B", texto: "Aumentar la temperatura de la aguja del feeder", correcta: false },
@@ -108,6 +114,7 @@ const app = {
             nombre: "Fisura de Anillo de Boca (Neck Ring Check)",
             image: "images/defects/fisura_anillo.png",
             zona: "Boca / Neck Ring",
+            tipoDefecto: "Mecánico / Térmico",
             mecanismoCausa: "Anillo de Boca (Neck Ring & Invert Holder)",
             desc: "Microfisura limpia en la zona del anillo de boca o rosca producida por impacto térmico o desalineación mecánica del portaanillos.",
             solucionOperador: "Auditar alineación del portaanillo de boca con el premolde y verificar la temperatura/enfriamiento del mecanismo de inversión.",
@@ -124,6 +131,7 @@ const app = {
             nombre: "Marca de Cizalla (Shear Mark)",
             image: "images/defects/marca_cizalla.png",
             zona: "Fondo / Pica",
+            tipoDefecto: "Mecánico / Alimentación",
             mecanismoCausa: "Alimentador & Tijeras (Feeder Shears)",
             desc: "Cicatriz o marca en forma de media luna en la base del envase provocada por tijeras desafiladas o mala emulsión de enfriamiento de cizalla.",
             solucionOperador: "Reemplazar hojas de cizalla despostilladas y regular el caudal de emulsión soluble de enfriamiento/lubricación.",
@@ -140,6 +148,7 @@ const app = {
             nombre: "Fondo Inclinado / Pica Deforme (Slanted Bottom)",
             image: "images/defects/fondo_inclinado.png",
             zona: "Fondo / Base",
+            tipoDefecto: "Térmico",
             mecanismoCausa: "Placa de Fondo (Bottom Plate & Verti-Flow)",
             desc: "Base del envase desnivelada o pica deformada por enfriamiento deficiente de la placa de fondo o desalineación en el asentamiento del molde.",
             solucionOperador: "Limpiar canales Verti-Flow de la placa de fondo, verificar flujo de aire de base y auditar centrado del mecanismo de fondo.",
@@ -156,6 +165,7 @@ const app = {
             nombre: "Botella Delgada / Pared Desigual (Thin Wall)",
             image: "images/defects/botella_delgada.png",
             zona: "Cuerpo",
+            tipoDefecto: "Mecánico / Carga",
             mecanismoCausa: "Gota / Canales & Distribuidor",
             desc: "Pared del envase con espesor insuficiente en un lateral debido a la caída descentrada de la gota o parison caliente desalineado.",
             solucionOperador: "Corregir el centrado de los canales oscilantes (Chutes) y la alineación del embudo para cargar la gota en el centro exacto del premolde.",
@@ -938,13 +948,16 @@ const app = {
             <div class="manual-card glass-panel">
                 <div class="manual-card-header">
                     <span class="manual-zone-badge">📍 ${d.zona}</span>
-                    <span class="manual-mechanism-badge">⚙️ ${d.mecanismoCausa || 'Máquina I.S.'}</span>
+                    <span class="manual-type-badge ${d.tipoDefecto && d.tipoDefecto.includes('Térmico') ? 'termico' : 'mecanico'}">
+                        ${d.tipoDefecto && d.tipoDefecto.includes('Térmico') ? '🔥 Térmico' : '⚙️ Mecánico'}
+                    </span>
                 </div>
                 <div class="manual-card-body">
                     <h4>${d.nombre}</h4>
+                    <span class="manual-mechanism-tag">⚙️ Mecanismo: ${d.mecanismoCausa || 'Máquina I.S.'}</span>
                     <p class="manual-desc">${d.desc}</p>
                     <div class="manual-solution-box">
-                        <strong>🛠️ Acción Correctiva del Operador:</strong>
+                        <strong>🛠️ Acción Correctiva del Operador (Cristalchile):</strong>
                         <p>${d.solucionOperador || 'Revisar la configuración de máquina y moldería.'}</p>
                     </div>
                 </div>
