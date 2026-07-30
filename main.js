@@ -874,26 +874,18 @@ const app = {
         document.getElementById('defectoDesc').textContent = `${defect.desc} (Zona: ${defect.zona})`;
         
         const imgElement = document.getElementById('defectoImage');
-        if (imgElement && defect.image) {
+        if (imgElement) {
+            const imgFileName = defect.id + '.png';
             imgElement.dataset.retried = '';
             imgElement.onerror = function() {
                 if (!this.dataset.retried) {
                     this.dataset.retried = 'true';
-                    const filename = this.src.split('/').pop();
-                    if (this.src.includes('/static/')) {
-                        this.src = 'images/defects/' + filename;
-                    } else {
-                        this.src = '/static/images/defects/' + filename;
-                    }
+                    this.src = 'images/defects/' + imgFileName;
                 }
             };
             
-            // Prefer /static/ prefix if running in Django environment
-            if (window.location.pathname.includes('/static/') || document.querySelector('link[href*="static/"]')) {
-                imgElement.src = '/static/images/defects/' + defect.id + '.png';
-            } else {
-                imgElement.src = 'images/defects/' + defect.id + '.png';
-            }
+            const pathPrefix = (window.location.pathname.includes('/static/') || document.querySelector('link[href*="static/"]')) ? '/static/images/defects/' : 'images/defects/';
+            imgElement.src = pathPrefix + imgFileName + '?v=2.0';
             imgElement.style.display = 'block';
         }
         
