@@ -5,14 +5,16 @@ const app = {
     level: 1,
     currentDefectIndex: 0,
     
-    // Base de datos de defectos enriquecida con información oficial de vitrodiag y fotografías reales
+    // Base de datos de 10 defectos vidrieros enriquecida con información oficial de Cristalchile/Vitrodiag
     defectosDB: [
         {
             id: "fondo_grueso",
             nombre: "Fondo Grueso (Thick Bottom)",
             image: "images/defects/fondo_grueso.png",
             zona: "Fondo / Base",
+            mecanismoCausa: "Premolde & Tiempo de Recalentamiento (Reheat)",
             desc: "El envase presenta acumulación excesiva de vidrio en el fondo. El parison no estiró lo suficiente durante la inversión debido a enfriamiento desigual o bajo recalentamiento (Reheat).",
+            solucionOperador: "Aumentar el tiempo de recalentamiento (Reheat) y ajustar el enfriamiento del premolde para permitir el estiramiento uniforme del vidrio por gravedad.",
             opciones: [
                 { id: "A", texto: "Aumentar tiempo de enfriamiento de premolde (Blank Cooling)", correcta: false },
                 { id: "B", texto: "Aumentar tiempo de recalentamiento (Reheat) y reducir enfriamiento de premolde", correcta: true },
@@ -26,7 +28,9 @@ const app = {
             nombre: "Cuello Doblado (Bent Neck)",
             image: "images/defects/cuello_doblado.png",
             zona: "Cuello / Finish",
+            mecanismoCausa: "Pinzas de Extracción (Takeout Mechanism)",
             desc: "El cuello del envase se observa desfasado o inclinado respecto al eje vertical al salir del molde soplador.",
+            solucionOperador: "Ajustar la sincronización del Takeout para evitar la extracción antes de la solidificación plástica del cuello y verificar alineación de dedales.",
             opciones: [
                 { id: "A", texto: "El mecanismo de extracción (Take Out) entra desfasado o muy pronto antes del enfriamiento de boca", correcta: true },
                 { id: "B", texto: "Aumentar temperatura global de la gota en la copa del alimentador", correcta: false },
@@ -40,7 +44,9 @@ const app = {
             nombre: "Costura Abierta (Split Seam)",
             image: "images/defects/costura_abierta.png",
             zona: "Cuerpo / Moldería",
+            mecanismoCausa: "Mecanismo de Cierre de Moldes (Mold Closing)",
             desc: "Se observa una fisura o abertura vertical marcada a lo largo de la línea de partición de las dos mitades del molde.",
+            solucionOperador: "Incrementar la presión de apriete del mecanismo de cierre de moldes y auditar el desgaste de platinas o suciedad en las caras de partición.",
             opciones: [
                 { id: "A", texto: "Disminuir lubricación de moldes (Swabbing)", correcta: false },
                 { id: "B", texto: "Aumentar la presión de cierre del mecanismo de moldes o revisar desgaste de platinas", correcta: true },
@@ -54,7 +60,9 @@ const app = {
             nombre: "Rebaba en la Boca (Overpressed Finish)",
             image: "images/defects/rebaba_boca.png",
             zona: "Boca / Cara de Sellado",
+            mecanismoCausa: "Macho Prensador NNPB (Servo Plunger)",
             desc: "Exceso de vidrio proyectado hacia arriba o a los lados en la cara de sellado de la boca, creando un filamento peligroso que causa fugas o cortes.",
+            solucionOperador: "Reducir el peso de la gota en el alimentador o ajustar el límite de carrera/presión de aire del macho prensador (Plunger NNPB).",
             opciones: [
                 { id: "A", texto: "Reducir sobrepeso de la gota o disminuir la presión de aire de prensado (Plunger)", correcta: true },
                 { id: "B", texto: "Aumentar la velocidad del soplado final", correcta: false },
@@ -62,6 +70,102 @@ const app = {
             ],
             feedbackExito: "¡Excelente! Al corregir el sobrepeso de gota o reducir la fuerza del plunger se evita que el vidrio sobrepase el área de la rosca.",
             feedbackError: "Incorrecto. La rebaba se origina en la fase de prensado por sobrepeso de vidrio o exceso de empuje del plunger."
+        },
+        {
+            id: "pliegue_hombro",
+            nombre: "Pliegue de Hombro (Shoulder Wrinkle)",
+            image: "images/defects/pliegue_hombro.png",
+            zona: "Hombro",
+            mecanismoCausa: "Premolde & Inversión Servo",
+            desc: "Ondulaciones o pliegues fríos en el área del hombro del envase causados por enfriamiento excesivo del parison o estiramiento brusco durante la inversión.",
+            solucionOperador: "Reducir el tiempo de enfriamiento del premolde (Blank Cooling) y suavizar la aceleración de los brazos de inversión.",
+            opciones: [
+                { id: "A", texto: "Aumentar la presión del soplado final", correcta: false },
+                { id: "B", texto: "Reducir enfriamiento de premolde y suavizar la aceleración de inversión", correcta: true },
+                { id: "C", texto: "Adelantar la extracción Takeout", correcta: false }
+            ],
+            feedbackExito: "¡Correcto! Mantener la piel del parison a la temperatura de conformación adecuada previene pliegues de frío en el hombro.",
+            feedbackError: "Incorrecto. Los pliegues son causados por piel fría en el parison durante la inversión."
+        },
+        {
+            id: "pajarilla_piel",
+            nombre: "Pajarilla / Piel de Naranja (Orange Peel)",
+            image: "images/defects/pajarilla_piel.png",
+            zona: "Cuerpo / Superficie",
+            mecanismoCausa: "Molde de Soplo (Blow Mold)",
+            desc: "Rugosidad o textura granulada en la superficie externa del vidrio debido a lubricación excesiva (Swabbing) o moldería sucia.",
+            solucionOperador: "Controlar y dosificar el uso de compuesto de lubricación (Swab) y limpiar depósitos de carbón en la cavidad del molde.",
+            opciones: [
+                { id: "A", texto: "Dosificar lubricación de moldes y descarbonizar cavidades", correcta: true },
+                { id: "B", texto: "Aumentar la temperatura de la aguja del feeder", correcta: false },
+                { id: "C", texto: "Retardar la apertura del premolde", correcta: false }
+            ],
+            feedbackExito: "¡Excelente! La lubricación controlada evita la acumulación de residuo grafitado que imprime arrugas en el vidrio caliente.",
+            feedbackError: "Incorrecto. El exceso de compuesto lubricante grafitado es la causa directa de la piel de naranja."
+        },
+        {
+            id: "fisura_anillo",
+            nombre: "Fisura de Anillo de Boca (Neck Ring Check)",
+            image: "images/defects/fisura_anillo.png",
+            zona: "Boca / Neck Ring",
+            mecanismoCausa: "Anillo de Boca (Neck Ring & Invert Holder)",
+            desc: "Microfisura limpia en la zona del anillo de boca o rosca producida por impacto térmico o desalineación mecánica del portaanillos.",
+            solucionOperador: "Auditar alineación del portaanillo de boca con el premolde y verificar la temperatura/enfriamiento del mecanismo de inversión.",
+            opciones: [
+                { id: "A", texto: "Aumentar velocidad de corte de cizalla", correcta: false },
+                { id: "B", texto: "Verificar alineación de portaanillos de boca y controlar choque térmico", correcta: true },
+                { id: "C", texto: "Disminuir presión de cierre de moldes de soplo", correcta: false }
+            ],
+            feedbackExito: "¡Bien hecho! La alineación precisa del Neck Ring evita esfuerzos cortantes y fisuras en el terminado de boca.",
+            feedbackError: "Incorrecto. Las fisuras de boca son provocadas por tensiones mecánicas o térmicas directas en el Neck Ring."
+        },
+        {
+            id: "marca_cizalla",
+            nombre: "Marca de Cizalla (Shear Mark)",
+            image: "images/defects/marca_cizalla.png",
+            zona: "Fondo / Pica",
+            mecanismoCausa: "Alimentador & Tijeras (Feeder Shears)",
+            desc: "Cicatriz o marca en forma de media luna en la base del envase provocada por tijeras desafiladas o mala emulsión de enfriamiento de cizalla.",
+            solucionOperador: "Reemplazar hojas de cizalla despostilladas y regular el caudal de emulsión soluble de enfriamiento/lubricación.",
+            opciones: [
+                { id: "A", texto: "Reemplazar hojas de cizalla y ajustar emulsión de corte", correcta: true },
+                { id: "B", texto: "Disminuir tiempo de soplado final", correcta: false },
+                { id: "C", texto: "Aumentar la presión de vaciado", correcta: false }
+            ],
+            feedbackExito: "¡Correcto! Hojas de cizalla con filo y buena lubricación cortan la gota limpiamente sin enfriar la cicatriz de corte.",
+            feedbackError: "Incorrecto. La marca de cizalla se genera al momento exacto del corte de la gota en el alimentador."
+        },
+        {
+            id: "fondo_inclinado",
+            nombre: "Fondo Inclinado / Pica Deforme (Slanted Bottom)",
+            image: "images/defects/fondo_inclinado.png",
+            zona: "Fondo / Base",
+            mecanismoCausa: "Placa de Fondo (Bottom Plate & Verti-Flow)",
+            desc: "Base del envase desnivelada o pica deformada por enfriamiento deficiente de la placa de fondo o desalineación en el asentamiento del molde.",
+            solucionOperador: "Limpiar canales Verti-Flow de la placa de fondo, verificar flujo de aire de base y auditar centrado del mecanismo de fondo.",
+            opciones: [
+                { id: "A", texto: "Disminuir temperatura de la aguja del feeder", correcta: false },
+                { id: "B", texto: "Limpiar canales Verti-Flow y verificar centrado de la placa de fondo", correcta: true },
+                { id: "C", texto: "Adelantar tiempo de vaciado", correcta: false }
+            ],
+            feedbackExito: "¡Exacto! El flujo de aire Verti-Flow en la placa de fondo solidifica la pica para evitar deformaciones por peso propio.",
+            feedbackError: "Incorrecto. La estabilidad de la base depende del soporte térmico y centrado de la placa de fondo."
+        },
+        {
+            id: "botella_delgada",
+            nombre: "Botella Delgada / Pared Desigual (Thin Wall)",
+            image: "images/defects/botella_delgada.png",
+            zona: "Cuerpo",
+            mecanismoCausa: "Gota / Canales & Distribuidor",
+            desc: "Pared del envase con espesor insuficiente en un lateral debido a la caída descentrada de la gota o parison caliente desalineado.",
+            solucionOperador: "Corregir el centrado de los canales oscilantes (Chutes) y la alineación del embudo para cargar la gota en el centro exacto del premolde.",
+            opciones: [
+                { id: "A", texto: "Alineación de canales/embudo y centrado de carga de gota", correcta: true },
+                { id: "B", texto: "Aumentar presión de soplado final", correcta: false },
+                { id: "C", texto: "Incrementar tiempo de vaciado", correcta: false }
+            ],
+            feedbackExito: "¡Bien hecho! La caída perfectamente centrada de la gota garantiza una distribución simétrica del espesor de pared de vidrio.",
+            feedbackError: "Incorrecto. Una pared delgada lateral es consecuencia directa de una carga de gota descentrada en el premolde."
         }
     ],
 
@@ -798,6 +902,56 @@ const app = {
         document.getElementById('btnNextDefect').classList.add('hidden');
     },
 
+    // --- Módulo 1: Pestañas (Manual de Estudio & Evaluación) ---
+    switchLabTab(tab) {
+        const btnEstudio = document.getElementById('tabBtnEstudio');
+        const btnEvaluacion = document.getElementById('tabBtnEvaluacion');
+        const viewEstudio = document.getElementById('labEstudioView');
+        const viewEvaluacion = document.getElementById('labEvaluacionView');
+
+        if (tab === 'estudio') {
+            if (btnEstudio) btnEstudio.classList.add('active');
+            if (btnEvaluacion) btnEvaluacion.classList.remove('active');
+            if (viewEstudio) viewEstudio.classList.remove('hidden');
+            if (viewEvaluacion) viewEvaluacion.classList.add('hidden');
+            this.renderManualEstudio('todas');
+        } else {
+            if (btnEvaluacion) btnEvaluacion.classList.add('active');
+            if (btnEstudio) btnEstudio.classList.remove('active');
+            if (viewEvaluacion) viewEvaluacion.classList.remove('hidden');
+            if (viewEstudio) viewEstudio.classList.add('hidden');
+            this.currentDefectIndex = 0;
+            this.renderDefecto();
+        }
+    },
+
+    renderManualEstudio(filterZona) {
+        const container = document.getElementById('manualCardsContainer');
+        if (!container) return;
+
+        let filtered = this.defectosDB;
+        if (filterZona && filterZona !== 'todas') {
+            filtered = this.defectosDB.filter(d => d.zona.toLowerCase().includes(filterZona.toLowerCase()));
+        }
+
+        container.innerHTML = filtered.map(d => `
+            <div class="manual-card glass-panel">
+                <div class="manual-card-header">
+                    <span class="manual-zone-badge">📍 ${d.zona}</span>
+                    <span class="manual-mechanism-badge">⚙️ ${d.mecanismoCausa || 'Máquina I.S.'}</span>
+                </div>
+                <div class="manual-card-body">
+                    <h4>${d.nombre}</h4>
+                    <p class="manual-desc">${d.desc}</p>
+                    <div class="manual-solution-box">
+                        <strong>🛠️ Acción Correctiva del Operador:</strong>
+                        <p>${d.solucionOperador || 'Revisar la configuración de máquina y moldería.'}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    },
+
     checkDefectAnswer(opt, btn) {
         const btns = document.querySelectorAll('.option-btn');
         btns.forEach(b => b.style.pointerEvents = 'none');
@@ -825,7 +979,7 @@ const app = {
     },
 
     loadNextDefect() {
-        this.currentDefectIndex++;
+        this.currentDefectIndex = (this.currentDefectIndex + 1) % this.defectosDB.length;
         this.renderDefecto();
     },
 

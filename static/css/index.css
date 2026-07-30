@@ -580,6 +580,136 @@ h1, h2, h3 { font-family: 'Orbitron', sans-serif; }
     font-size: 0.8rem;
 }
 
+/* Estilos de Pestañas y Manual de Estudio (Módulo 1) */
+.lab-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.8rem;
+}
+.lab-tab-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.lab-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+.lab-tab-btn.active {
+    background: linear-gradient(135deg, rgba(0, 136, 255, 0.2), rgba(255, 85, 0, 0.2));
+    border-color: var(--accent-orange);
+    color: var(--text-main);
+    box-shadow: 0 0 15px rgba(255, 85, 0, 0.2);
+}
+
+.manual-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+.filter-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.filter-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.filter-chip:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+.filter-chip.active {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: #fff;
+    font-weight: 600;
+}
+
+.manual-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+.manual-card {
+    background: rgba(18, 24, 38, 0.7);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.manual-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 85, 0, 0.3);
+}
+.manual-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+.manual-zone-badge {
+    background: rgba(0, 136, 255, 0.15);
+    color: var(--accent-blue);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+}
+.manual-mechanism-badge {
+    background: rgba(255, 85, 0, 0.15);
+    color: var(--accent-orange);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+}
+.manual-card-body h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 0.4rem;
+}
+.manual-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 0.8rem;
+}
+.manual-solution-box {
+    background: rgba(0, 230, 118, 0.08);
+    border-left: 3px solid var(--accent-green);
+    padding: 0.6rem 0.8rem;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.8rem;
+    color: var(--text-main);
+}
+.manual-solution-box strong {
+    color: var(--accent-green);
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .anatomy-grid { grid-template-columns: 1fr; }

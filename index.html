@@ -94,34 +94,65 @@
             </div>
         </section>
 
-        <!-- VISTA: LABORATORIO DE DEFECTOS -->
+        <!-- VISTA: LABORATORIO DE DEFECTOS Y MANUAL DE ESTUDIO -->
         <section id="view-defectos" class="view-section">
             <div class="glass-panel lab-panel">
                 <header class="lab-header">
-                    <h2>Laboratorio de Diagnóstico 🔍</h2>
+                    <div>
+                        <h2>Módulo 1: Defectología y Diagnóstico Vidriero 🔍</h2>
+                        <p class="subtitle">Manual de Estudio Teorico-Práctico & Evaluación de Causa Raíz</p>
+                    </div>
                     <button class="btn-secondary" onclick="app.showView('menu')">Volver al Centro</button>
                 </header>
-                
-                <div class="lab-content">
-                    <div class="defecto-display">
-                        <div class="defecto-visual">
-                            <div class="defecto-img-placeholder">
-                                <img id="defectoImage" src="" alt="Fotografía Real de Defecto Vidriero" class="defecto-real-img">
-                            </div>
-                            <h3 id="defectoNombre">Cargando caso...</h3>
-                            <p id="defectoDesc" class="defecto-desc">Esperando datos de telemetría...</p>
-                        </div>
+
+                <div class="lab-tabs">
+                    <button id="tabBtnEstudio" class="lab-tab-btn active" onclick="app.switchLabTab('estudio')">
+                        📖 Manual de Estudio (10 Defectos)
+                    </button>
+                    <button id="tabBtnEvaluacion" class="lab-tab-btn" onclick="app.switchLabTab('evaluacion')">
+                        🎯 Evaluación de Diagnóstico
+                    </button>
+                </div>
+
+                <!-- PESTAÑA 1: MANUAL DE ESTUDIO -->
+                <div id="labEstudioView" class="lab-tab-content">
+                    <div class="manual-filters">
+                        <span class="filter-label">Filtrar por Zona del Envase:</span>
+                        <button class="filter-chip active" onclick="app.renderManualEstudio('todas')">Todas las Zonas</button>
+                        <button class="filter-chip" onclick="app.renderManualEstudio('Boca')">Boca</button>
+                        <button class="filter-chip" onclick="app.renderManualEstudio('Cuello')">Cuello</button>
+                        <button class="filter-chip" onclick="app.renderManualEstudio('Hombro')">Hombro</button>
+                        <button class="filter-chip" onclick="app.renderManualEstudio('Cuerpo')">Cuerpo</button>
+                        <button class="filter-chip" onclick="app.renderManualEstudio('Fondo')">Fondo</button>
                     </div>
-                    
-                    <div class="defecto-controls">
-                        <h3>¿Cuál es la causa raíz o el ajuste necesario?</h3>
-                        <div id="opcionesContainer" class="options-list">
-                            <!-- Opciones generadas por JS -->
+                    <div id="manualCardsContainer" class="manual-cards-grid">
+                        <!-- Cárdenas generadas por JS -->
+                    </div>
+                </div>
+
+                <!-- PESTAÑA 2: EVALUACIÓN PRÁCTICA -->
+                <div id="labEvaluacionView" class="lab-tab-content hidden">
+                    <div class="lab-content">
+                        <div class="defecto-display">
+                            <div class="defecto-visual">
+                                <div class="defecto-img-placeholder">
+                                    <img id="defectoImage" src="" alt="Fotografía Real de Defecto Vidriero" class="defecto-real-img">
+                                </div>
+                                <h3 id="defectoNombre">Cargando caso...</h3>
+                                <p id="defectoDesc" class="defecto-desc">Esperando datos de telemetría...</p>
+                            </div>
                         </div>
-                        <div id="feedbackPanel" class="feedback-panel hidden">
-                            <!-- Mensaje de acierto o error -->
+                        
+                        <div class="defecto-controls">
+                            <h3>¿Cuál es la causa raíz o el ajuste necesario?</h3>
+                            <div id="opcionesContainer" class="options-list">
+                                <!-- Opciones generadas por JS -->
+                            </div>
+                            <div id="feedbackPanel" class="feedback-panel hidden">
+                                <!-- Mensaje de acierto o error -->
+                            </div>
+                            <button id="btnNextDefect" class="btn-primary hidden" onclick="app.loadNextDefect()">Siguiente Caso 🚀</button>
                         </div>
-                        <button id="btnNextDefect" class="btn-primary hidden" onclick="app.loadNextDefect()">Siguiente Caso 🚀</button>
                     </div>
                 </div>
             </div>
