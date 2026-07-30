@@ -65,8 +65,17 @@ const app = {
         }
     ],
 
-    // Base de datos de mecanismos de sección I.S. (Cristal Chile)
+    // Base de datos de mecanismos de sección I.S. (Cristal Chile / BDF Industries)
     mecanismosISDB: {
+        alimentador_cizalla: {
+            nombre: "Alimentador y Cizalla (Gob Feeder & Shears)",
+            sub: "Dosificación y Corte de Gota de Vidrio (1050°C)",
+            temp: "1050°C - 1150°C (Vidrio fundido)",
+            presion: "Mecanismo servo asistido / Hojas refrigeradas",
+            lubricacion: "Agua de enfriamiento con emulsión soluble en hojas de tijera",
+            funcion: "Corta y dosifica el peso exacto de la gota de vidrio caliente mediante la acción rápida de las hojas de cizalla sincronizadas con la aguja del feeder.",
+            defectos: "Marcas de cizalla (Shear Mark), Gota desfasada, Sobrepeso o bajo peso de gota."
+        },
         macho: {
             nombre: "Macho Prensador (Plunger Mechanism)",
             sub: "Mecanismo Prensador NNPB / Soplo-Prensado",
@@ -102,6 +111,15 @@ const app = {
             lubricacion: "Swabbing periódico y pulido de fondo",
             funcion: "Alberga el parison invertido para el soplado final. Le otorga al envase su forma final de cuerpo, hombro y fondo.",
             defectos: "Costura Abierta (Split Seam), Botella deforme, Espesor delgado de pared."
+        },
+        fondo_vertiflow: {
+            nombre: "Placa de Fondo y Enfriamiento Verti-Flow",
+            sub: "Conformación de Pica de Botella y Enfriamiento Vertical",
+            temp: "400°C - 450°C",
+            presion: "Aire de enfriamiento de alta presión (Verti-Flow)",
+            lubricacion: "Limpieza y descarbonizado de superficie de pica",
+            funcion: "Forma el fondo del envase (pica) y suministra aire de enfriamiento radial o vertical a través de pequeños canales para estabilizar la base de la botella.",
+            defectos: "Fondo inclinado, Pica deforme, Marcas de junta de fondo."
         },
         cabeza_soplo: {
             nombre: "Cabeza de Soplo (Blow Head)",
@@ -311,7 +329,38 @@ const app = {
         const cos = Math.cos(rad);
         const sin = Math.sin(rad);
 
-        if (id === 'macho') {
+        if (id === 'alimentador_cizalla') {
+            // Feeder Orifice & Gob Shears Mechanism
+            const shearPos = Math.sin(Date.now() * 0.005) * 35;
+            const gobY = (Date.now() * 0.12) % 120 - 60;
+
+            // Feeder Bowl & Orifice Ring (Copa de Alimentador)
+            ctx.fillStyle = 'rgba(60, 65, 75, 0.95)'; ctx.strokeStyle = '#ff5500'; ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.rect(-65, -130, 130, 35);
+            ctx.fill(); ctx.stroke();
+
+            // Molten Glass Feed Stream (Vidrio fundido 1050°C)
+            ctx.fillStyle = 'rgba(255, 140, 0, 0.95)';
+            ctx.shadowColor = '#ff5500'; ctx.shadowBlur = 30;
+            ctx.beginPath();
+            ctx.rect(-16, -95, 32, 40);
+            ctx.fill();
+
+            // Falling Glowing Gob
+            ctx.beginPath();
+            ctx.ellipse(0, gobY, 15, 25, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Dual Shear Blades (Hojas de Cizalla de Corte)
+            ctx.fillStyle = '#cbd5e1'; ctx.strokeStyle = '#00f0ff'; ctx.lineWidth = 2;
+            // Left Blade
+            ctx.beginPath(); ctx.rect(-70 + shearPos, -55, 60, 14); ctx.fill(); ctx.stroke();
+            // Right Blade
+            ctx.beginPath(); ctx.rect(10 - shearPos, -55, 60, 14); ctx.fill(); ctx.stroke();
+        }
+        else if (id === 'macho') {
             // Macho Prensador (NNPB Plunger Mechanism) - Esquema 3D Realista
             const pHeight = 100 + Math.sin(Date.now() * 0.004) * 20;
 
@@ -480,7 +529,39 @@ const app = {
             ctx.ellipse(0, -15, bw, 55, 0, 0, Math.PI * 2);
             ctx.fill(); ctx.stroke();
             ctx.shadowBlur = 0;
-        } 
+        }
+        else if (id === 'fondo_vertiflow') {
+            // Bottom Plate & Verti-Flow Cooling Base
+            const airFlow = (Date.now() * 0.08) % 30;
+
+            // Bottom Plate Body (Placa de Fondo de Pica)
+            ctx.fillStyle = 'rgba(45, 55, 70, 0.95)'; ctx.strokeStyle = '#00ff88'; ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.rect(-50, 20, 100, 45);
+            ctx.fill(); ctx.stroke();
+
+            // Bottle Pushup Profile (Pica de Fondo de Botella)
+            ctx.fillStyle = 'rgba(30, 40, 50, 0.95)';
+            ctx.beginPath();
+            ctx.ellipse(0, 20, 35, 18, 0, 0, Math.PI);
+            ctx.fill(); ctx.stroke();
+
+            // Verti-Flow Cooling Air Streams (Aire Vertical de Alta Presión)
+            ctx.strokeStyle = 'rgba(0, 255, 136, 0.8)'; ctx.lineWidth = 1.5;
+            for (let x = -35; x <= 35; x += 14) {
+                ctx.beginPath();
+                ctx.moveTo(x, 65); ctx.lineTo(x, 65 - airFlow);
+                ctx.stroke();
+            }
+
+            // Glowing Bottom of Bottle
+            ctx.fillStyle = 'rgba(255, 110, 0, 0.85)';
+            ctx.shadowColor = '#00ff88'; ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.ellipse(0, 18, 32, 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
         else if (id === 'cabeza_soplo') {
             // Cabeza de Soplo (Blow Head Assembly & Final Blow)
             const bhY = -90 + Math.sin(Date.now() * 0.004) * 15;
