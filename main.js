@@ -541,17 +541,6 @@ const app = {
             ctx.fill(); ctx.stroke();
             ctx.shadowBlur = 0;
         }
-            ctx.lineTo(tx, -40);
-            ctx.stroke();
-
-            // Tongs holding hot bottle
-            ctx.fillStyle = 'rgba(255, 85, 0, 0.8)';
-            ctx.shadowColor = '#ff0055'; ctx.shadowBlur = 20;
-            ctx.beginPath();
-            ctx.ellipse(tx, 10, 20, 45, 0, 0, Math.PI * 2);
-            ctx.fill(); ctx.stroke();
-            ctx.shadowBlur = 0;
-        }
 
         ctx.restore();
     },
