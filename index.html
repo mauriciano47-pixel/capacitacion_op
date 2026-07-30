@@ -292,28 +292,34 @@
                         <h3>Mecanismos de Sección I.S.</h3>
                         <div class="parts-selector-grid">
                             <button class="part-btn" onclick="app.selectMecanismo('alimentador_cizalla', this)">
-                                <span>🔥 Alimentador / Cizalla (Feeder & Shears)</span>
+                                <span>🔥 1. Feeder & Shears Servo</span>
                             </button>
-                            <button class="part-btn active" onclick="app.selectMecanismo('macho', this)">
-                                <span>🔹 Macho Prensador (Plunger)</span>
+                            <button class="part-btn" onclick="app.selectMecanismo('distribuidor_canales', this)">
+                                <span>🔀 2. Distribuidor y Canales</span>
+                            </button>
+                            <button class="part-btn" onclick="app.selectMecanismo('embudos', this)">
+                                <span>📥 3. Mecanismo Embudos</span>
                             </button>
                             <button class="part-btn" onclick="app.selectMecanismo('premolde', this)">
-                                <span>🔹 Premolde (Blank Mold)</span>
+                                <span>🔹 4. Premolde y Tapa (Blank)</span>
+                            </button>
+                            <button class="part-btn active" onclick="app.selectMecanismo('macho', this)">
+                                <span>🔹 5. Macho Prensador NNPB</span>
                             </button>
                             <button class="part-btn" onclick="app.selectMecanismo('inversion', this)">
-                                <span>🔹 Mecanismo de Inversión</span>
+                                <span>🔹 6. Inversión Servo 180°</span>
                             </button>
                             <button class="part-btn" onclick="app.selectMecanismo('molde_soplo', this)">
-                                <span>🔹 Molde de Soplo (Blow Mold)</span>
+                                <span>🔹 7. Molde de Soplo & Cierre</span>
                             </button>
                             <button class="part-btn" onclick="app.selectMecanismo('fondo_vertiflow', this)">
-                                <span>🔹 Placa Fondo (Verti-Flow)</span>
+                                <span>🔹 8. Placa Fondo Verti-Flow</span>
                             </button>
                             <button class="part-btn" onclick="app.selectMecanismo('cabeza_soplo', this)">
-                                <span>🔹 Cabeza de Soplo (Blow Head)</span>
+                                <span>🔹 9. Cabeza de Soplo Final</span>
                             </button>
-                            <button class="part-btn" onclick="app.selectMecanismo('takeout', this)">
-                                <span>🔹 Pinzas Extracción (Takeout)</span>
+                            <button class="part-btn" onclick="app.selectMecanismo('takeout_pusher', this)">
+                                <span>🤖 10. Takeout Servo & Pusher</span>
                             </button>
                         </div>
 

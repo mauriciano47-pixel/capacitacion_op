@@ -65,79 +65,97 @@ const app = {
         }
     ],
 
-    // Base de datos de mecanismos de sección I.S. (Cristal Chile / BDF Industries)
+    // Base de datos de los 10 mecanismos reales de sección I.S. (Bucher Emhart / BDF / Cristal Chile)
     mecanismosISDB: {
         alimentador_cizalla: {
-            nombre: "Alimentador y Cizalla (Gob Feeder & Shears)",
+            nombre: "1. Alimentador y Cizalla Servo (Servo Feeder & Shears)",
             sub: "Dosificación y Corte de Gota de Vidrio (1050°C)",
-            temp: "1050°C - 1150°C (Vidrio fundido)",
-            presion: "Mecanismo servo asistido / Hojas refrigeradas",
-            lubricacion: "Agua de enfriamiento con emulsión soluble en hojas de tijera",
-            funcion: "Corta y dosifica el peso exacto de la gota de vidrio caliente mediante la acción rápida de las hojas de cizalla sincronizadas con la aguja del feeder.",
+            temp: "1050°C - 1150°C (Vidrio fundido en tazón)",
+            presion: "Servoasistido / Hojas refrigeradas con emulsión",
+            lubricacion: "Agua de enfriamiento con emulsión soluble en tijeras",
+            funcion: "Corta y dosifica el peso exacto de la gota de vidrio caliente mediante la acción servoasistida de las hojas de cizalla de alta velocidad sincronizadas con la aguja del feeder.",
             defectos: "Marcas de cizalla (Shear Mark), Gota desfasada, Sobrepeso o bajo peso de gota."
         },
-        macho: {
-            nombre: "Macho Prensador (Plunger Mechanism)",
-            sub: "Mecanismo Prensador NNPB / Soplo-Prensado",
-            temp: "450°C - 480°C",
-            presion: "2.5 - 3.5 bar (Aire / Hidráulico)",
-            lubricacion: "Grafito líquido / Swabbing automático",
-            funcion: "Inyecta y presiona el vidrio fundido dentro del premolde para conformar la cavidad interna del parison y la cara de sellado del terminado en procesos NNPB.",
-            defectos: "Rebaba en la boca (Overpressed Finish), Bajo Boca (Underpressed), Fisuras de prensado."
+        distribuidor_canales: {
+            nombre: "2. Distribuidor de Gota y Canales (Gob Distributor & Chutes)",
+            sub: "Guiado y Reparto de Gota a Secciones",
+            temp: "350°C - 450°C (Canales y deflector)",
+            presion: "Giro neumático/servo de cesta distribuidora",
+            lubricacion: "Grafito seco micro-pulverizado en canales",
+            funcion: "Recibe las gotas recién cortadas y las distribuye cíclicamente a cada sección I.S. a través de canales oscilantes (Chutes) y deflectores curveados.",
+            defectos: "Gota frenada, Pliegues de impacto, Marcas de aceite/lubricante contaminado."
+        },
+        embudos: {
+            nombre: "3. Mecanismo de Embudos (Funnel Mechanism)",
+            sub: "Guiado Neumático de Gota hacia el Premolde",
+            temp: "400°C - 480°C",
+            presion: "3.5 - 4.5 bar neumático",
+            lubricacion: "Descarbonizado periódico de superficie interna",
+            funcion: "Desciende sobre el premolde abierto para canalizar la caída libre de la gota e insertarla de forma centrada dentro de la cavidad del premolde.",
+            defectos: "Gota descentrada, Fisura en hombro de premolde, Impacto de embudo."
         },
         premolde: {
-            nombre: "Premolde (Blank Mold)",
-            sub: "Moldería de Conformación Primaria de Parison",
-            temp: "460°C - 500°C",
-            presion: "Cierre neumático / Mecanismo de apriete",
-            lubricacion: "Swabbing cada 15-20 minutos",
-            funcion: "Recibe la gota de vidrio fundido a 1050°C. Alberga el parison antes de la inversión y realiza la transferencia térmica de piel inicial.",
+            nombre: "4. Premolde y Tapa (Blank Mold & Baffle Mechanism)",
+            sub: "Conformación Primaria del Parison NNPB",
+            temp: "460°C - 500°C (Verti-Flow axicompact)",
+            presion: "Cierre asistido / Apriete neumático-mecanizado",
+            lubricacion: "Swabbing manual o automático con grasa grafitada",
+            funcion: "Alberga la gota y forma el parison hueco preliminar. La tapa de premolde (Baffle) se asienta arriba para permitir el prensado o soplado inicial.",
             defectos: "Pliegues de premolde, Marcas de partición, Espesor desigual de parison."
         },
+        macho: {
+            nombre: "5. Macho Prensador Servo NNPB (Servo Plunger Mechanism)",
+            sub: "Prensado de Precisión e Inyección de Boca NNPB",
+            temp: "450°C - 480°C (Enfriamiento de aire interno)",
+            presion: "2.5 - 3.8 bar (Cilindro servo/neumático)",
+            lubricacion: "Grafito líquido / Swabbing de aguja de prensado",
+            funcion: "Penetra el vidrio incandescente en el premolde para formar la cavidad interna del parison y la cara de sellado del terminado en proceso NNPB.",
+            defectos: "Rebaba en la boca (Overpressed Finish), Bajo Boca (Underpressed), Fisuras de prensado."
+        },
         inversion: {
-            nombre: "Mecanismo de Inversión (Invert Mechanism)",
-            sub: "Brazos de Inversión 180° de Sección",
-            temp: "350°C - 400°C (Brazos y Anillo)",
-            presion: "4.0 bar neumático",
-            lubricacion: "Grasa de alta temperatura en articulaciones",
-            funcion: "Gira el parison caliente 180° desde el premolde hasta el molde soplador manteniendo sujetado el anillo de boca (Neck Ring).",
+            nombre: "6. Mecanismo de Inversión Servo 180° (Servo Invert Mechanism)",
+            sub: "Traspaso Rotativo de Parison por Anillo de Boca",
+            temp: "350°C - 400°C (Brazos y Neck Ring Holder)",
+            presion: "Accionamiento servo o cremallera neumática 4.0 bar",
+            lubricacion: "Grasa sintética de alta temperatura en articulaciones",
+            funcion: "Sujeta el anillo de boca (Neck Ring) y gira el parison 180° desde la estación de premolde a la estación de soplo para su expansión final.",
             defectos: "Cuello Doblado (Bent Neck), Desgarro en hombro, Marcas de vacilación."
         },
         molde_soplo: {
-            nombre: "Molde de Soplo (Blow Mold)",
-            sub: "Moldería Final de Conformación de Botella",
-            temp: "440°C - 480°C (Enfriamiento Verti-Flow)",
-            presion: "Cierre neumático / Cierre asistido",
-            lubricacion: "Swabbing periódico y pulido de fondo",
-            funcion: "Alberga el parison invertido para el soplado final. Le otorga al envase su forma final de cuerpo, hombro y fondo.",
+            nombre: "7. Molde de Soplo y Cierre (Blow Mold & Servo Closing)",
+            sub: "Conformación Final de Cuerpo y Hombro",
+            temp: "440°C - 480°C (Verti-Flow radial)",
+            presion: "Apriete neumático / Cierre asistido de moldería",
+            lubricacion: "Swabbing periódico y pulido de cavidad",
+            funcion: "Cierra sus dos mitades alrededor del parison invertido para permitir su expansión mediante el soplo final hasta tomar la forma exacta de la botella.",
             defectos: "Costura Abierta (Split Seam), Botella deforme, Espesor delgado de pared."
         },
         fondo_vertiflow: {
-            nombre: "Placa de Fondo y Enfriamiento Verti-Flow",
-            sub: "Conformación de Pica de Botella y Enfriamiento Vertical",
+            nombre: "8. Placa de Fondo y Verti-Flow (Bottom Plate Mechanism)",
+            sub: "Conformación de Pica y Enfriamiento de Base",
             temp: "400°C - 450°C",
-            presion: "Aire de enfriamiento de alta presión (Verti-Flow)",
+            presion: "Aire de enfriamiento vertical de alta presión",
             lubricacion: "Limpieza y descarbonizado de superficie de pica",
-            funcion: "Forma el fondo del envase (pica) y suministra aire de enfriamiento radial o vertical a través de pequeños canales para estabilizar la base de la botella.",
+            funcion: "Soporta el fondo de la botella y suministra aire de enfriamiento Verti-Flow por microcanales para solidificar la pica y base del envase.",
             defectos: "Fondo inclinado, Pica deforme, Marcas de junta de fondo."
         },
         cabeza_soplo: {
-            nombre: "Cabeza de Soplo (Blow Head)",
-            sub: "Inyección de Aire de Soplado Final",
+            nombre: "9. Cabeza de Soplo Final (Blow Head Mechanism)",
+            sub: "Inyección Neumática de Aire Comprimido Final",
             temp: "200°C - 300°C",
             presion: "2.0 - 2.8 bar (Aire comprimido filtrado)",
-            lubricacion: "Limpieza neumática periódica",
-            funcion: "Se posiciona sobre la boca del envase y suministra aire comprimido para expandir el vidrio contra las paredes del molde de soplo.",
+            lubricacion: "Limpieza y purging neumático",
+            funcion: "Se acopla herméticamente sobre la boca del envase e inyecta aire comprimido a alta presión para expandir el vidrio contra el molde de soplo.",
             defectos: "Falta de soplo, Porosidad en cuerpo, Deformación de boca."
         },
-        takeout: {
-            nombre: "Pinzas de Extracción (Takeout Mechanism)",
-            sub: "Transferencia de Botella Caliente a Placa de Enfriamiento",
-            temp: "150°C (Pinzas recubiertas de carbono)",
-            presion: "3.5 bar neumático",
-            lubricacion: "Revisiones de alineación de pinzas",
-            funcion: "Toma el envase recién formado desde el molde soplador abierto y lo deposita en la placa de enfriamiento (Dead Plate).",
-            defectos: "Cuello doblado por extracción, Marcas de pinza, Caída de botellas."
+        takeout_pusher: {
+            nombre: "10. Pinzas Extracción Servo & Empujador (Servo Takeout & Pusher)",
+            sub: "Transferencia a Deadplate y Empuje a Transportador",
+            temp: "150°C (Pinzas de carbono/grafito)",
+            presion: "3.5 bar neumático / Servo 90°",
+            lubricacion: "Verificación de alineación de pinzas y dedales",
+            funcion: "Extrae la botella del molde abierto, la deposita en la placa de enfriamiento (Deadplate) y los dedos empujadores (Pusher) la posicionan en el transportador.",
+            defectos: "Cuello doblado por extracción, Marcas de pinza, Botella caída en transportador."
         }
     },
 
@@ -359,6 +377,57 @@ const app = {
             ctx.beginPath(); ctx.rect(-70 + shearPos, -55, 60, 14); ctx.fill(); ctx.stroke();
             // Right Blade
             ctx.beginPath(); ctx.rect(10 - shearPos, -55, 60, 14); ctx.fill(); ctx.stroke();
+        }
+        else if (id === 'distribuidor_canales') {
+            // Gob Distributor & Oscilating Chutes (Canales de Gota)
+            const chuteAngle = Math.sin(Date.now() * 0.003) * 0.35;
+            
+            // Rotating Scoop/Distributor Basket (Cesta Distribuidora)
+            ctx.fillStyle = 'rgba(50, 60, 75, 0.95)'; ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.arc(0, -110, 30, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+            // Inclined Chute Guide Pipe (Canal Oscilante Revestido)
+            ctx.save();
+            ctx.rotate(chuteAngle);
+            ctx.fillStyle = 'rgba(30, 40, 55, 0.95)'; ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.rect(-18, -80, 36, 120);
+            ctx.fill(); ctx.stroke();
+
+            // Sliding Glowing Gob inside Chute
+            ctx.fillStyle = 'rgba(255, 120, 0, 0.9)';
+            ctx.shadowColor = '#ff5500'; ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 12, 20, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.restore();
+        }
+        else if (id === 'embudos') {
+            // Funnel Mechanism (Embudo Guía de Gota)
+            const funnelY = -80 + Math.sin(Date.now() * 0.004) * 20;
+
+            // Pneumatic Actuation Arm (Brazo Neumático de Embudo)
+            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(-60, -140); ctx.lineTo(0, funnelY); ctx.stroke();
+
+            // Conical Funnel Body (Cuerpo Cónico de Embudo)
+            ctx.fillStyle = 'rgba(60, 40, 80, 0.95)'; ctx.strokeStyle = '#c084fc'; ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(-45, funnelY);
+            ctx.lineTo(45, funnelY);
+            ctx.lineTo(20, funnelY + 55);
+            ctx.lineTo(-20, funnelY + 55);
+            ctx.closePath();
+            ctx.fill(); ctx.stroke();
+
+            // Guided Gob Falling into Funnel
+            ctx.fillStyle = 'rgba(255, 130, 0, 0.95)';
+            ctx.shadowColor = '#ffaa00'; ctx.shadowBlur = 22;
+            ctx.beginPath();
+            ctx.ellipse(0, funnelY + 20, 13, 22, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
         }
         else if (id === 'macho') {
             // Macho Prensador (NNPB Plunger Mechanism) - Esquema 3D Realista
