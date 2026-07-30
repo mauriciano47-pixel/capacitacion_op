@@ -274,18 +274,16 @@ const app = {
 
         const realImgEl = document.getElementById('anatomyImageReal');
         if (realImgEl) {
+            const imgFileName = (id === 'takeout_pusher' || id === 'takeout') ? 'takeout_pusher.png' : (id + '.png');
             realImgEl.dataset.retried = '';
             realImgEl.onerror = function() {
                 if (!this.dataset.retried) {
                     this.dataset.retried = 'true';
-                    this.src = 'images/anatomy/' + id + '.png';
+                    this.src = 'images/anatomy/' + imgFileName;
                 }
             };
-            if (window.location.pathname.includes('/static/') || document.querySelector('link[href*="static/"]')) {
-                realImgEl.src = '/static/images/anatomy/' + id + '.png';
-            } else {
-                realImgEl.src = 'images/anatomy/' + id + '.png';
-            }
+            const pathPrefix = (window.location.pathname.includes('/static/') || document.querySelector('link[href*="static/"]')) ? '/static/images/anatomy/' : 'images/anatomy/';
+            realImgEl.src = pathPrefix + imgFileName + '?v=4.0';
         }
 
         const specContainer = document.getElementById('specCardContainer');
